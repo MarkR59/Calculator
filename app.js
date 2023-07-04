@@ -1,9 +1,8 @@
-let number1 = 0;
-let number2 = 0;
 let operation = null;
 let firstOperand = null;
 let secondOperand = null;
 let shouldClearScreen = false;
+let clearAll = false;
 
 function add(num1, num2){
     return parseInt(num1) + parseInt(num2);
@@ -44,6 +43,8 @@ const backButton = document.getElementById('Back');
 const lastDisplay = document.getElementById('display-last')
 const currentDisplay = document.getElementById('display-current');
 
+window.addEventListener('keydown', handleKeys);
+
 numberButtons.forEach((button) =>
     button.addEventListener('click', () => appendNumber(button.textContent))
 );
@@ -51,6 +52,9 @@ numberButtons.forEach((button) =>
 operatorButtons.forEach((button) =>
     button.addEventListener('click', () => setOperation(button.textContent))
 );
+
+equalsButton.addEventListener('click', evaluate);
+clearButton.addEventListener('click', clearFullScreen);
 
 
 function appendNumber(number){
@@ -70,6 +74,13 @@ function setOperation(operator){
     shouldClearScreen = true;
 }
 
+function clearFullScreen(){
+    currentDisplay.textContent = '';
+    lastDisplay.textContent = '';
+    operation = null;
+    shouldClearScreen = false;
+}
+
 function clearScreen(){
     currentDisplay.textContent = '';
     shouldClearScreen = false;
@@ -77,6 +88,16 @@ function clearScreen(){
 
 function evaluate(){
     secondOperand = currentDisplay.textContent;
+    lastDisplay.textContent = `${firstOperand} ${operation} ${secondOperand}` + " =";
     currentDisplay.textContent = operate(firstOperand, secondOperand, operation);
-    console.log(operate(firstOperand, secondOperand, operation));
+    firstOperand = currentDisplay.textContent;
+    operation = null;
+}
+
+function handleKeys(e){
+    if ((e.key >= 0 && e.key <= 9) || e.key == '.') appendNumber(e.key);
+    if (e.key === '=' || e.key === 'Enter') evaluate();
+    if (e.key === 'Escape') clearFullScreen();
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/')
+      setOperation(e.key);
 }
