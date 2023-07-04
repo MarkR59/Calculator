@@ -55,6 +55,7 @@ operatorButtons.forEach((button) =>
 
 equalsButton.addEventListener('click', evaluate);
 clearButton.addEventListener('click', clearFullScreen);
+backButton.addEventListener('click', deleteLast);
 
 
 function appendNumber(number){
@@ -72,6 +73,12 @@ function setOperation(operator){
     firstOperand = currentDisplay.textContent;
     lastDisplay.textContent = `${firstOperand} ${operation}`;
     shouldClearScreen = true;
+}
+
+function deleteLast(){
+    currentDisplay.textContent = currentDisplay.textContent
+    .toString()
+    .slice(0, -1);
 }
 
 function clearFullScreen(){
